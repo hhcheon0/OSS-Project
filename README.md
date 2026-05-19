@@ -1,4 +1,4 @@
-#Status: In Progress
+# Status: In Progress
 
 # Weather-OSS-Project
  - 2026 대구대학교 오픈소스소프트웨어 팀 프로젝트 19조
