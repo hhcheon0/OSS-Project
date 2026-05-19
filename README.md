@@ -75,6 +75,7 @@ Git 브랜치 추천
 feature/main-ui
 feature/weather-dashboard
 feature/dark-mode
+
 2. 날씨 데이터 처리 및 API 연동 (Weather Data Engineer)
 
 외부 날씨 데이터를 가져오고 가공하는 핵심 기능을 담당합니다.
@@ -94,6 +95,7 @@ Git 브랜치 추천
 feature/weather-api
 feature/location-search
 feature/data-parser
+
 3. 백엔드 및 시스템 관리 (Backend & System Engineer)
 
 프로젝트의 서버 및 데이터 저장 기능을 담당합니다.
