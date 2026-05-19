@@ -102,7 +102,7 @@ feature/data-parser
 
 주요 임무
 사용자 즐겨찾기 지역 저장
-로그인 기능 구현(Optional)
+로그인 기능 구현(선택)
 서버 구축 및 배포
 캐싱 및 성능 최적화
 CI/CD 및 GitHub 협업 환경 관리
