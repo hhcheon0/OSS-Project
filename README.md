@@ -1,6 +1,6 @@
 #Status: In Progress
 
-# Weather-OS-Project
+# Weather-OSS-Project
  - 2026 대구대학교 오픈소스소프트웨어 팀 프로젝트 19조
 
 # 1. 프로젝트 목적: "오픈소스 데이터를 활용한 직관적인 날씨 웹 서비스"
@@ -55,30 +55,61 @@ git branch -d feature/add-auth
 
 # 2. 역할 분담
 
-## 🏗️ 추천 역할 분담 (3인 체제)
-## 1. UI/UX 디자인 및 프론트엔드 (Visual Lead)
-가장 눈에 보이는 부분인 'OS 인터페이스'를 담당합니다.
+🌦️ 추천 역할 분담 (3인 체제)
+1. UI/UX 및 프론트엔드 개발 (Frontend & Design)
 
-주요 임무: 데스크탑 배경화면, 아이콘 배치, 작업 표시줄(Taskbar), 윈도우 창 열기/닫기 애니메이션 구현.
+사용자가 직접 보는 날씨 화면과 인터페이스를 담당합니다.
 
-기술 포인트: CSS Grid/Flexbox를 활용한 레이아웃 구성, 반응형 디자인, UI 테마(다크/라이트 모드) 설정.
+주요 임무
+메인 날씨 대시보드 구현
+현재 날씨 / 주간 예보 UI 제작
+반응형 웹 디자인 적용
+다크모드 및 테마 설정
+날씨 아이콘 및 애니메이션 적용
+기술 포인트
+HTML/CSS/JavaScript
+React/Vue 등 프론트엔드 프레임워크
+CSS Grid/Flexbox
+Chart.js 또는 Recharts 활용
+Git 브랜치 추천
+feature/main-ui
+feature/weather-dashboard
+feature/dark-mode
+2. 날씨 데이터 처리 및 API 연동 (Weather Data Engineer)
 
-Git 브랜치 추천: feature/ui-layout, feature/os-animations
+외부 날씨 데이터를 가져오고 가공하는 핵심 기능을 담당합니다.
 
-## 2. 코어 시스템 로직 개발 (Core Logic Engineer)
-OS의 핵심 기능인 '상태 관리 및 창 제어'를 담당합니다.
+주요 임무
+OpenAPI 연동 (날씨)
+지역 검색 기능 구현
+실시간 날씨 데이터 처리
+기온/습도/풍속 데이터 가공
+API 오류 및 예외 처리
+기술 포인트
+Fetch/Axios 비동기 통신
+REST API
+JSON 데이터 처리
+환경 변수(API Key) 관리
+Git 브랜치 추천
+feature/weather-api
+feature/location-search
+feature/data-parser
+3. 백엔드 및 시스템 관리 (Backend & System Engineer)
 
-주요 임무: 여러 개의 창이 뜰 때 우선순위(Z-index) 관리, 드래그 앤 드롭 기능, 시스템 시간/날짜 로직, 파일 탐색기 구조 설계.
+프로젝트의 서버 및 데이터 저장 기능을 담당합니다.
 
-기술 포인트: JavaScript 객체 지향 프로그래밍, 전역 상태 관리, 이벤트 핸들링 최적화.
-
-Git 브랜치 추천: feature/window-manager, feature/system-logic
-
-## 3. 데이터 엔진 및 API 연동 (Data & Integration)
-'날씨 정보 처리 및 외부 기능'을 담당합니다.
-
-주요 임무: Weather API(OpenWeatherMap 등) 연동, 지역별 날씨 검색 로직, 기상 데이터 파싱 및 시각화(차트 등), 위치 정보 처리.
-
-기술 포인트: 비동기 통신(Fetch/Axios), JSON 데이터 가공, 에러 핸들링(네트워크 오류 대응).
-
-Git 브랜치 추천: feature/weather-api, feature/search-engine
+주요 임무
+사용자 즐겨찾기 지역 저장
+로그인 기능 구현(Optional)
+서버 구축 및 배포
+캐싱 및 성능 최적화
+CI/CD 및 GitHub 협업 환경 관리
+기술 포인트
+Node.js / Express
+Firebase 또는 MongoDB
+GitHub Actions
+Vercel / Render / AWS 배포
+Git 브랜치 추천
+feature/backend
+feature/auth
+feature/deployment
