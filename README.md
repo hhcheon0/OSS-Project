@@ -55,25 +55,4 @@ git branch -d feature/add-auth
 
 # 2. 역할 분담
 
-🌦️ 추천 역할 분담 (3인 체제)
-1. UI/UX 및 프론트엔드 개발 (Frontend & Design)
-
-사용자가 직접 보는 인터페이스를 담당합니다.
-
-feature/main-ui
-
-2. API 연동 
-
-feature/data-parser
-
-3. 백엔드 및 시스템 관리 (Backend & System Engineer)
-
-프로젝트의 서버 및 데이터 저장 기능을 담당합니다.
-
-주요 임무
-
-CI/CD 및 GitHub 협업 환경 관리
-
-feature/backend
-
-feature/deployment
+# Status: In Progress
