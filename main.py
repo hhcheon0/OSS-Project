@@ -91,6 +91,7 @@ def get_crawler_status():
 def list_notices(
     page: int = Query(1, ge=1, description="페이지 번호"),
     size: int = Query(10, ge=1, le=100, description="페이지 당 항목 수"),
+    category: Optional[str] = Query(None, description="카테고리 필터"),
     pinned_only: Optional[bool] = Query(None, description="상단 고정 공지만 조회 여부"),
     search: Optional[str] = Query(None, description="제목 내 검색어 키워드"),
     db: Session = Depends(get_db)
@@ -101,6 +102,10 @@ def list_notices(
     """
     query = db.query(Notice)
     
+    # 카테고리 필터
+    if category and category != "전체":
+        query = query.filter(Notice.category == category)
+
     # 상단 고정 필터
     if pinned_only is not None:
         query = query.filter(Notice.is_pinned == pinned_only)

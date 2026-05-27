@@ -37,6 +37,8 @@ class DuplicateFilterPipeline:
             
         return item
 
+from campus_notice_crawler.utils.ai_helper import analyze_notice_with_ai
+
 class DatabasePipeline:
     """수집된 학사공지 데이터를 SQLite 또는 PostgreSQL(Supabase)에 영구 저장하는 파이프라인"""
     def __init__(self):
@@ -48,6 +50,9 @@ class DatabasePipeline:
     def process_item(self, item, spider):
         notice_id = item.get('notice_id')
         
+        # AI 분석 가동 (카테고리, 3줄 요약, 핵심태그 생성)
+        ai_res = analyze_notice_with_ai(item.get('title', ''), item.get('content', ''))
+        
         # SQLAlchemy Notice 객체 생성
         notice_db = Notice(
             notice_id=notice_id,
@@ -57,6 +62,9 @@ class DatabasePipeline:
             created_at=item.get('created_at'),
             is_pinned=item.get('is_pinned', False),
             content=item.get('content'),
+            category=ai_res.get('category', '행정안내'),
+            summary=ai_res.get('summary', []),
+            key_points=ai_res.get('keyPoints', []),
             attachments=item.get('attachments', []),
             images=item.get('images', []),
             view_count=item.get('view_count', 0),
@@ -66,7 +74,7 @@ class DatabasePipeline:
         try:
             self.db.merge(notice_db) # 존재하면 덮어쓰기(Upsert), 없으면 Insert
             self.db.commit()
-            spider.logger.info(f"DatabasePipeline: Successfully saved notice '{item['title'][:20]}...' to DB.")
+            spider.logger.info(f"DatabasePipeline: Successfully saved notice '{item['title'][:20]}...' (Category: {ai_res.get('category')}) to DB.")
         except Exception as e:
             self.db.rollback()
             spider.logger.error(f"DatabasePipeline: Failed to save notice {notice_id} to DB: {e}")

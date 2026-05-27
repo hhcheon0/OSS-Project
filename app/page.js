@@ -27,6 +27,39 @@ export default function Home() {
   const [bookmarkedIds, setBookmarkedIds] = useState([]);
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [notices, setNotices] = useState(MOCK_NOTICES);
+
+  const fetchNotices = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:8080/notices?page=1&size=100");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.items && data.items.length > 0) {
+          const mapped = data.items.map(item => ({
+            id: item.notice_id,
+            title: item.title,
+            category: item.category || "행정안내",
+            date: item.created_at || new Date().toISOString().split('T')[0],
+            views: item.view_count || 0,
+            writer: item.author || "학사지원팀",
+            content: item.content || "",
+            summary: item.summary && item.summary.length > 0 ? item.summary : [
+              "상세 정보는 원본 링크를 참고하세요."
+            ],
+            keyPoints: item.keyPoints || [],
+            attachments: item.attachments || [],
+            originalUrl: item.url
+          }));
+          
+          const apiIds = new Set(mapped.map(n => n.id));
+          const uniqueMock = MOCK_NOTICES.filter(n => !apiIds.has(n.id));
+          setNotices([...mapped, ...uniqueMock]);
+        }
+      }
+    } catch (err) {
+      console.log("Backend API not reachable, falling back to Mock Data.", err);
+    }
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -44,6 +77,8 @@ export default function Home() {
     const savedTheme = localStorage.getItem("uni_notice_theme") || "dark";
     setTheme(savedTheme);
     document.documentElement.className = savedTheme;
+
+    fetchNotices();
   }, []);
 
   const toggleTheme = () => {
@@ -76,15 +111,24 @@ export default function Home() {
     localStorage.setItem("uni_notice_bookmarks", JSON.stringify(updated));
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true);
-    setTimeout(() => {
+    try {
+      const crawlRes = await fetch("http://127.0.0.1:8080/crawl", { method: "POST" });
+      
+      // Wait a brief moment and fetch notices
+      await new Promise(resolve => setTimeout(resolve, 2500));
+      await fetchNotices();
+      alert("[갱신 완료] 학사공지 수집 및 AI 3줄 요약이 최신화되었습니다.");
+    } catch (err) {
+      console.log("Failed to refresh via API:", err);
+      alert("[갱신 완료] 학사공지 수집 및 3줄 요약이 최신화되었습니다. (로컬 캐시)");
+    } finally {
       setIsRefreshing(false);
-      alert("[갱신 완료] 학사공지 수집 및 3줄 요약이 최신화되었습니다.");
-    }, 1000);
+    }
   };
 
-  const filteredNotices = MOCK_NOTICES.filter((notice) => {
+  const filteredNotices = notices.filter((notice) => {
     const matchesCategory = activeCategory === "전체" || notice.category === activeCategory;
     const matchesSearch = 
       notice.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -93,7 +137,7 @@ export default function Home() {
     return matchesCategory && matchesSearch;
   });
 
-  const bookmarkedNotices = MOCK_NOTICES.filter(notice => bookmarkedIds.includes(notice.id));
+  const bookmarkedNotices = notices.filter(notice => bookmarkedIds.includes(notice.id));
 
   if (!isMounted) {
     return (

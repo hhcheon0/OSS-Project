@@ -22,6 +22,9 @@ class Notice(Base):
     content = Column(Text)
     attachments = Column(JSON, default=list)  # [{"name": "...", "url": "..."}] 형태
     images = Column(JSON, default=list)       # ["http://...", ...] 형태
+    category = Column(String(50), default='행정안내')
+    summary = Column(JSON, default=list)       # ["요약1", "요약2", "요약3"] 형태
+    key_points = Column(JSON, default=list)    # ["태그1", "태그2", ...] 형태
     view_count = Column(Integer, default=0)
     source = Column(String(100), default='daegu_university')
     scraped_at = Column(DateTime, default=datetime.datetime.utcnow)
@@ -35,6 +38,9 @@ class Notice(Base):
             "created_at": self.created_at,
             "is_pinned": self.is_pinned,
             "content": self.content,
+            "category": self.category,
+            "summary": self.summary,
+            "keyPoints": self.key_points,
             "attachments": self.attachments,
             "images": self.images,
             "view_count": self.view_count,
