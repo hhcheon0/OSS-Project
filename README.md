@@ -55,4 +55,6 @@ git branch -d feature/add-auth
 
 # 2. 역할 분담
 
-# Status: In Progress
+-웹 크롤링 1명
+-서버&요약AI 1명
+-앱 UI 1명
