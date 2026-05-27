@@ -30,7 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env*
 
 # vercel
@@ -40,7 +45,43 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# [OSS Project] - 기획 및 로컬 가이드 문서 제외
-last.md
-PRD.md
-README.md
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+ENV/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Databases & Environments
+*.db
+campus_notices.db
+
+# Scrapy
+.scrapy/
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS temporary files
+Thumbs.db
