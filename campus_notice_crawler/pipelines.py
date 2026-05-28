@@ -38,6 +38,7 @@ class DuplicateFilterPipeline:
         return item
 
 from campus_notice_crawler.utils.ai_helper import analyze_notice_with_ai
+from api.vector_helper import get_embedding
 
 class DatabasePipeline:
     """수집된 학사공지 데이터를 SQLite 또는 PostgreSQL(Supabase)에 영구 저장하는 파이프라인"""
@@ -53,6 +54,10 @@ class DatabasePipeline:
         # AI 분석 가동 (카테고리, 3줄 요약, 핵심태그 생성)
         ai_res = analyze_notice_with_ai(item.get('title', ''), item.get('content', ''))
         
+        # 텍스트 임베딩 생성 (RAG 확장용)
+        combined_text = f"{item.get('title', '')}\n{item.get('content', '')}"
+        embedding = get_embedding(combined_text)
+        
         # SQLAlchemy Notice 객체 생성
         notice_db = Notice(
             notice_id=notice_id,
@@ -65,6 +70,7 @@ class DatabasePipeline:
             category=ai_res.get('category', '행정안내'),
             summary=ai_res.get('summary', []),
             key_points=ai_res.get('keyPoints', []),
+            embedding=embedding, # 임베딩 벡터 저장
             attachments=item.get('attachments', []),
             images=item.get('images', []),
             view_count=item.get('view_count', 0),

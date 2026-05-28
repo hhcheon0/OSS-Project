@@ -7,6 +7,7 @@ import NoticeCard from "@/components/NoticeCard";
 import SubscriptionWidget from "@/components/SubscriptionWidget";
 import BookmarkList from "@/components/BookmarkList";
 import DetailModal from "@/components/DetailModal";
+import ChatWidget from "@/components/ChatWidget";
 
 /* 
  * [OSS Upgrade] - app/page.js 가독성 극대화 리팩토링
@@ -314,6 +315,9 @@ export default function Home() {
         onClose={() => setSelectedNotice(null)}
         notice={selectedNotice}
       />
+
+      {/* 7. AI 챗봇 Widget (RAG 확장) */}
+      <ChatWidget onOpenNoticeDetail={setSelectedNotice} />
     </div>
   );
 }

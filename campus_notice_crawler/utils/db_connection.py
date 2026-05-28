@@ -25,6 +25,7 @@ class Notice(Base):
     category = Column(String(50), default='행정안내')
     summary = Column(JSON, default=list)       # ["요약1", "요약2", "요약3"] 형태
     key_points = Column(JSON, default=list)    # ["태그1", "태그2", ...] 형태
+    embedding = Column(JSON, nullable=True)     # [float, float, ...] 형태의 텍스트 임베딩 벡터
     view_count = Column(Integer, default=0)
     source = Column(String(100), default='daegu_university')
     scraped_at = Column(DateTime, default=datetime.datetime.utcnow)
@@ -41,6 +42,7 @@ class Notice(Base):
             "category": self.category,
             "summary": self.summary,
             "keyPoints": self.key_points,
+            "embedding": self.embedding,
             "attachments": self.attachments,
             "images": self.images,
             "view_count": self.view_count,

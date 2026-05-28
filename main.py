@@ -139,6 +139,28 @@ def get_notice_detail(notice_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Notice with ID {notice_id} not found.")
     return notice.to_dict()
 
+from pydantic import BaseModel
+class ChatRequest(BaseModel):
+    query: str
+
+@app.post("/chat")
+def chat_with_notices(request: ChatRequest, db: Session = Depends(get_db)):
+    """
+    [POST] 공지사항 기반 RAG 챗봇 Q&A
+    사용자 질문에 대하여 관련 공지 검색 및 AI 답변 생성
+    """
+    if not request.query.strip():
+        raise HTTPException(status_code=400, detail="Query cannot be empty.")
+        
+    from api.rag_service import search_similar_notices, generate_rag_answer
+    
+    # 1. 유사 공지 Top 3 검색
+    similar = search_similar_notices(db, request.query, top_n=3)
+    
+    # 2. RAG 답변 생성
+    result = generate_rag_answer(request.query, similar)
+    return result
+
 if __name__ == "__main__":
     # 포트 및 호스트 환경 변수 로드
     port = int(os.getenv("API_PORT", "8000"))
