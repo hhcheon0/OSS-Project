@@ -49,19 +49,31 @@ class DaeguNoticeSpider(scrapy.Spider):
                 title = ""
 
             href = title_link.attrib.get('href', '')
-            if not href:
-                continue
+            onclick = title_link.attrib.get('onclick', '')
+            
+            notice_id = None
+            if href and 'detail/' in href:
+                match_id = re.search(r'detail/(\d+)', href)
+                if match_id:
+                    notice_id = match_id.group(1)
+            
+            if not notice_id and onclick:
+                match_onclick = re.search(r'goDetail\s*\(\s*\'?(\d+)\'?\s*\)', onclick)
+                if match_onclick:
+                    notice_id = match_onclick.group(1)
+                    href = f"/article/DG159/detail/{notice_id}"
+
+            if not notice_id:
+                match_num = re.search(r'(\d+)', href or '')
+                if match_num:
+                    notice_id = match_num.group(1)
+                elif href and href != "#none" and not href.startswith("javascript:"):
+                    notice_id = str(hash(urljoin(response.url, href)))
+                else:
+                    continue
 
             # 절대 경로로 변환
             detail_url = urljoin(response.url, href)
-
-            # notice_id 추출 (URL에서 detail/(\d+) 패턴)
-            match_id = re.search(r'detail/(\d+)', href)
-            if match_id:
-                notice_id = match_id.group(1)
-            else:
-                # detail/ 패턴이 없을 시 URL 해시 등으로 폴백
-                notice_id = str(hash(detail_url))
 
             # 3. 작성자 (네 번째 td)
             author = cols[3].css('::text').get()
